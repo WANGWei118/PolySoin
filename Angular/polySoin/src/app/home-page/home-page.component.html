@@ -1,0 +1,68 @@
+<div class="header">
+  <button nz-button class="menu" (click)="open()">
+    <i nz-icon nzType="menu"></i>
+  </button>
+  <h2>{{menuChoosed}}</h2>
+  <button
+    class="plusButton"
+    nz-button
+    nz-dropdown
+    *ngIf="innerWidth > 600"
+    [nzDropdownMenu]="menu"
+    [nzPlacement]="'bottomLeft'">
+    <i nz-icon nzType="plus-circle"></i>
+  </button>
+</div>
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="visible"
+  [nzPlacement]="'left'"
+  nzTitle="My PolySoin"
+  (nzOnClose)="close()">
+  <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" [nzLoading]="loading">
+    <ng-template #item let-item>
+      <nz-list-item>
+        <nz-list-item-meta
+          (click)="openItem(item.title)"
+          [nzTitle]="nzTitle"
+          [nzAvatar]="item.image">
+          <ng-template #nzTitle>
+            <h3>{{ item.title }}</h3>
+          </ng-template>
+        </nz-list-item-meta>
+      </nz-list-item>
+    </ng-template>
+  </nz-list>
+</nz-drawer>
+
+<button class="floatButton"
+        *ngIf="innerWidth < 600"
+        nz-button
+        nz-dropdown
+        [nzDropdownMenu]="menu" [nzPlacement]="'topLeft'">
+  <i nz-icon nzType="plus-circle"></i>
+</button>
+
+<div class="cardContainer">
+  <app-medicine-card-view
+    class="appCardView"
+    *ngFor="let m of listOfMedicine">
+  </app-medicine-card-view>
+</div>
+
+<barcode-scanner-livestream-overlay type="code_128" (valueChanges)="onValueChanges($event)">
+
+</barcode-scanner-livestream-overlay>
+<div [hidden]="!barcodeValue">
+  {{barcodeValue}}
+</div>
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item
+        (click)="openMenu(item.id)"
+        *ngFor="let item of options">
+      {{item.option}}</li>
+  </ul>
+</nz-dropdown-menu>

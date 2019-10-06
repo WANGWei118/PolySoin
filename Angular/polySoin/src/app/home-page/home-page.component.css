@@ -1,0 +1,82 @@
+h3{
+  cursor: pointer;
+}
+
+h3:hover{
+  color: #e9911d;
+}
+
+.menu{
+  height: 40px;
+  width: 40px;
+  float: left;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.header{
+  height: 50px;
+  width: 100%;
+  background-color: #13227a;
+  margin-top: 1px;
+  vertical-align: center;
+  display: inline-flex;
+  text-align: center;
+}
+
+h2{
+  color: #f0f2f5;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+
+.floatButton{
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  height: 40px;
+  width: 40px;
+  z-index: 999;
+}
+
+.plusButton{
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  right: 5px;
+  margin-top: 5px;
+}
+
+.cardContainer{
+  background: #ECECEC;
+  padding: 20px;
+  height: 100%;
+  bottom: 0;
+  display: block;
+  overflow-y: auto;
+  flex-wrap: wrap;
+  text-align: center;
+  flex-direction: row;
+}
+
+.appCardView {
+  margin-left: 15px;
+  margin-top: 5px;
+  width: 310px;
+  float: left;
+}
+
+
+@media screen and (max-width: 600px) {
+  .cardContainer{
+    display: block;
+    text-align: center;
+  }
+
+  .appCardView {
+    display: inline-block;
+    width: 90%;
+  }
+}
+

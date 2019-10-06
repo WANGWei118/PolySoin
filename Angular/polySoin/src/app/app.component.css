@@ -1,0 +1,39 @@
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+nz-header {
+  background: #fff;
+  padding-left: 20px;
+}
+
+nz-content {
+  margin: 0 16px;
+}
+
+nz-breadcrumb {
+  margin: 16px 0;
+}
+
+.inner-content {
+  padding: 24px;
+  background: #fff;
+  min-height: 768px;
+}
+
+nz-footer {
+  text-align: center;
+}
+
+.context {
+  margin: 20px;
+}
+
+
+.floatButton{
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}

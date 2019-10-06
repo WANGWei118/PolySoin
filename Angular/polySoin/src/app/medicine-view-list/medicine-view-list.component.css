@@ -1,0 +1,14 @@
+.list{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .list{
+    background-color: rosybrown;
+  }
+  .appCardView{
+    border: solid 1px red;
+  }
+}
