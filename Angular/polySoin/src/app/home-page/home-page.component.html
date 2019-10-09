@@ -50,6 +50,8 @@
   </app-medicine-card-view>
 </div>
 
+<app-add-medicine #addMedicineComponent [innerWidth]="innerWidth"></app-add-medicine>
+
 <barcode-scanner-livestream-overlay type="code_128" (valueChanges)="onValueChanges($event)">
 
 </barcode-scanner-livestream-overlay>
@@ -66,3 +68,4 @@
       {{item.option}}</li>
   </ul>
 </nz-dropdown-menu>
+

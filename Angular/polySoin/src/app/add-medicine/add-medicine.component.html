@@ -1,0 +1,54 @@
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Add medicines" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item *ngFor="let control of listOfControl; let i = index">
+      <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i == 0" [nzFor]="control.controlInstance"
+      >Medicines
+      </nz-form-label>
+      <nz-form-control
+        [nzXs]="24"
+        [nzSm]="20"
+        *ngIf="innerWidth>600"
+        [nzOffset]="i == 0 ? 0 : 4"
+        nzErrorTip="Please input your medicine's name or delete this field."
+      >
+        <input
+          class="passenger-input"
+          nz-input
+          placeholder="medicine name"
+          [attr.id]="control.id"
+          [formControlName]="control.controlInstance"
+        />
+        <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
+      </nz-form-control>
+
+      <nz-form-control
+        [nzXs]="24"
+        [nzSm]="20"
+        *ngIf="innerWidth<600"
+        nzErrorTip="Please input your medicine's name or delete this field."
+      >
+        <input
+          class="passenger-input"
+          nz-input
+          placeholder="medicine name"
+          [attr.id]="control.id"
+          [formControlName]="control.controlInstance"
+        />
+        <i nz-icon nzType="minus-circle-o" class="dynamic-delete-button" (click)="removeField(control, $event)"></i>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
+        <button nz-button nzType="dashed" class="add-button" (click)="addField($event)">
+          <i nz-icon nzType="plus"></i>
+          Add field
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 20, offset: 4 }">
+        <button nz-button nzType="primary">Submit</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

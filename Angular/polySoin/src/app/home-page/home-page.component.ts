@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {BarecodeScannerLivestreamComponent, BarecodeScannerLivestreamOverlayComponent} from "ngx-barcode-scanner";
+import {AddMedicineComponent} from "../add-medicine/add-medicine.component";
 
 @Component({
   selector: 'app-home-page',
@@ -13,7 +14,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   innerWidth: any;
   listOfMedicine = ['1', '2', '3', '4', '5', '6', '7', '8'];
   menuChoosed = 'Today';
-  isScanner = false;
+  isScanner = true;
   data = [
     {
       title: 'Today',
@@ -48,6 +49,9 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
   @ViewChild(BarecodeScannerLivestreamOverlayComponent, {static: true})
   barecodeScannerOverlay: BarecodeScannerLivestreamOverlayComponent;
+
+  @ViewChild(AddMedicineComponent, {static: true})
+  addMedicineComponent: AddMedicineComponent;
 
   barcodeValue = {
     medicine: 'Pepto Bismol',
@@ -93,9 +97,14 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   }
 
   openMenu(id: number) {
-    this.isScanner = id === 1;
-    if (this.isScanner) {
-      this.barecodeScannerOverlay.show();
+    switch (id) {
+      case 1:
+        this.barecodeScannerOverlay.show();
+        this.isScanner = true;
+        break;
+      case 2:
+        this.addMedicineComponent.showModal();
+        break;
     }
   }
 }
