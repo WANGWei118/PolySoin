@@ -1,5 +1,9 @@
 package com.polysoin;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -7,6 +11,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,8 +23,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.polysoin.dummy.DrugDummyContent;
+import com.polysoin.dummy.DrugHistoryDummyContent;
 import com.polysoin.dummy.DummyItem;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, TabFragment1.OnListFragmentInteractionListener, TabHistoryFragment.OnListFragmentInteractionListener {
 
@@ -33,13 +44,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (savedInstanceState != null) {
             darkMode = savedInstanceState.getBoolean("darkMode");
-        }
-        if (!(loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)) || !(!loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO))) {
+        }/*
+        if (!loadPrefs("auto_night_mode") && (!(loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)) || !(!loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO)))) {
             if (loadPrefs("enable_night_mode")) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
+        }*/
+        if (loadPrefs("enable_night_mode")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,7 +67,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         myPagerAdapter.addUpdate();
-
+        //button add
+        /*
+        FloatingActionButton fab = findViewById(R.id.qr_code_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //DrugDummyContent.addItem(DrugDummyContent.createDummyItem(DrugDummyContent.ITEMS.size() + DrugHistoryDummyContent.ITEMSHISTORY.size(), "medoc", "un cachet", new Date()));
+               // myPagerAdapter.addUpdate();
+                scheduleNotification(getNotification("10 second delay"), 10000);
+            }
+        });*/
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (loadPrefs("auto_night_mode")) {
@@ -95,6 +121,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onListFragmentInteraction(DummyItem item) {
+
+    }
+
+    public void onListFragmentInteraction(FloatingActionButton floatingActionButton) {
+        int id = DrugDummyContent.ITEMS.size() + DrugHistoryDummyContent.ITEMSHISTORY.size();
+        DrugDummyContent.addItem(DrugDummyContent.createDummyItem(id, "Drug " + id, "take ur drug " + id, new Date()));
+        scheduleNotification(getNotification("PolySoin", "take ur drug " + id), 10000, id);
     }
 
     @Override
@@ -104,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
             sensorManager.unregisterListener(this);
-
         }
     }
 
@@ -146,5 +178,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
+    }
+
+    private void scheduleNotification(Notification.Builder builder, int delay, int notificationId) {
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent activity = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(activity);
+
+        Notification notification = builder.build();
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationId);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification.Builder getNotification(String title, String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle(title);
+        builder.setContentText(content);
+        builder.setAutoCancel(true);
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        return builder;
     }
 }

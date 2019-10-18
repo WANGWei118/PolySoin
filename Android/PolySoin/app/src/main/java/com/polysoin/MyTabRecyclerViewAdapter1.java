@@ -3,8 +3,7 @@ package com.polysoin;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,62 +41,46 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        //System.out.println(holder.isTaken);
-        if (!holder.isTaken) {
-            holder.mTitleView.setText(mValues.get(position).title + mValues.get(position).id);
-            holder.mDetailView.setText(mValues.get(position).details);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mListener) {
-                        // Notify the active callbacks interface (the activity, if the
-                        // fragment is attached to one) that an item has been selected.
-                        mListener.onListFragmentInteraction(holder.mItem);
-                    }
+        holder.mTitleView.setText(mValues.get(position).title);
+        holder.mDetailView.setText(mValues.get(position).details);
+/*
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onListFragmentInteraction(holder.mItem);
                 }
-            });
-        } else {
-            holder.mItem.isTaken = true;
-        }
+            }
+        });*/
     }
-
 
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTitleView;
         public final TextView mDetailView;
-        public boolean isTaken = false;
         public DummyItem mItem;
-        public CheckBox checkBox;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mTitleView = view.findViewById(R.id.item_title);
             mDetailView = view.findViewById(R.id.detail);
-            checkBox = view.findViewById(R.id.isTaken);
+            Button button = view.findViewById(R.id.isTaken);
 
-            //item click event listener
-            view.setOnClickListener(this);
-
-            //checkbox click event handling
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            //Button click event handling
+            button.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        buttonView.setChecked(true);
-                        isTaken = true;
-                        mValues.get(getPosition()).isTaken = true;
-                        mValuesHistory.add(mValues.get(getPosition()));
-                        removeAt(getPosition());
-                        tabFragment1.getMyPagerAdapter().removeUpdate();
-                    }
+                public void onClick(View v) {
+                    mValues.get(getPosition()).isTaken = true;
+                    mValuesHistory.add(mValues.get(getPosition()));
+                    removeAt(getPosition());
                 }
             });
         }
@@ -111,10 +94,6 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
             mValues.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, mValues.size());
-        }
-
-        @Override
-        public void onClick(View v) {
         }
     }
 }

@@ -37,7 +37,7 @@ public class MyTabHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyTabH
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         if (holder.mItem.isTaken) {
-            holder.mTitleView.setText(mValues.get(position).title + mValues.get(position).id);
+            holder.mTitleView.setText(mValues.get(position).title);
             holder.mDetailView.setText(mValues.get(position).details);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -28,11 +28,12 @@
         android:ellipsize="end"
         android:textAppearance="?attr/textAppearanceListItem" />
 
-    <CheckBox
+    <Button
         android:id="@+id/isTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:text="@string/button_text" />
 
     <View
         android:layout_width="match_parent"

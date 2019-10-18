@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.polysoin.dummy.DrugDummyContent;
 import com.polysoin.dummy.DrugHistoryDummyContent;
-import com.polysoin.dummy.DummyItem;
-
-import java.util.Date;
 
 /**
  * A fragment representing a list of Items.
@@ -27,7 +24,6 @@ public class TabFragment1 extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyTabRecyclerViewAdapter1 myTabRecyclerViewAdapter1;
-    private MyPagerAdapter myPagerAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,12 +58,12 @@ public class TabFragment1 extends Fragment {
         recyclerView.setAdapter(myTabRecyclerViewAdapter1);
 
         //button add
-        FloatingActionButton fab = view.findViewById(R.id.qr_code_btn);
+        final FloatingActionButton fab = view.findViewById(R.id.qr_code_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrugDummyContent.addItem(DrugDummyContent.createDummyItem(DrugDummyContent.ITEMS.size() + DrugHistoryDummyContent.ITEMSHISTORY.size(), "medoc", "un cachet", new Date()));
-                myPagerAdapter.addUpdate();
+                mListener.onListFragmentInteraction(fab);
+                myTabRecyclerViewAdapter1.notifyDataSetChanged();
             }
         });
         return view;
@@ -75,6 +71,14 @@ public class TabFragment1 extends Fragment {
 
     public void update() {
         myTabRecyclerViewAdapter1.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && myTabRecyclerViewAdapter1 != null) {
+            myTabRecyclerViewAdapter1.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -95,14 +99,7 @@ public class TabFragment1 extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DummyItem item);
-    }
-
-    public void setMyPagerAdapter(MyPagerAdapter myPagerAdapter) {
-        this.myPagerAdapter = myPagerAdapter;
-    }
-
-    public MyPagerAdapter getMyPagerAdapter() {
-        return myPagerAdapter;
+        void onListFragmentInteraction(FloatingActionButton item);
     }
 }
+

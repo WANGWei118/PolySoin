@@ -20,11 +20,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 tabFragment1 = new TabFragment1();
-                tabFragment1.setMyPagerAdapter(this);
                 return tabFragment1;
             case 1:
                 tabFragment2 = new TabFragment1();
-                tabFragment2.setMyPagerAdapter(this);
                 return tabFragment2;
             case 2:
                 tabFragment3 = new TabHistoryFragment();

@@ -5,6 +5,8 @@
 
 
     <string name="key_send_feedback">key_send_feedback</string>
+    <string name="button_text">OK</string>
+
     <!-- Settings Preference  -->
     <string name="messages_header">Night Theme</string>
     <string name="enable_night_mode">Enable Night Mode</string>
