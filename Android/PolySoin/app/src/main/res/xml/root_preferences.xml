@@ -14,4 +14,21 @@
             app:title="@string/enable_night_mode"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/messages_header_notification">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="sound_notification"
+            app:summary="@string/attachment_summary_sound_notification"
+            app:title="@string/title_sound_notifiaction"/>
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="vibrate_notification"
+            app:summary="@string/attachment_summary_vibrate_notification"
+            app:title="@string/title_vibrate_notifiaction"/>
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="led_notification"
+            app:summary="@string/attachment_summary_led_notification"
+            app:title="@string/title_led_notifiaction"/>
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

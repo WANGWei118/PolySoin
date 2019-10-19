@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -45,7 +46,7 @@ public class TabFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_list1, container, false);
-        myTabRecyclerViewAdapter1 = new MyTabRecyclerViewAdapter1(DrugDummyContent.ITEMS, DrugHistoryDummyContent.ITEMSHISTORY, mListener, this);
+        myTabRecyclerViewAdapter1 = new MyTabRecyclerViewAdapter1(DrugDummyContent.ITEMS, DrugHistoryDummyContent.ITEMSHISTORY, mListener);
 
         // Set the adapter
         Context context = view.getContext();
@@ -99,7 +100,9 @@ public class TabFragment1 extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(FloatingActionButton item);
+        void onListFragmentInteraction(FloatingActionButton floatingActionButton);
+
+        void onListFragmentInteraction(Button button, int id);
     }
 }
 

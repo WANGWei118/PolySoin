@@ -8,9 +8,25 @@
     <string name="button_text">OK</string>
 
     <!-- Settings Preference  -->
+
+    <!-- night theme preference -->
     <string name="messages_header">Night Theme</string>
+
     <string name="enable_night_mode">Enable Night Mode</string>
     <string name="attachment_summary_enable_night_mode">Switch on to enable Night Mode</string>
+
     <string name="enable_auto_night_mode">Enable auto Night Mode</string>
     <string name="attachment_summary__auto_enable_night_mode">Switch on to enable auto Night Mode</string>
+
+    <!-- notification preference -->
+    <string name="messages_header_notification">Notification</string>
+
+    <string name="title_sound_notifiaction">Enable Sound notification</string>
+    <string name="attachment_summary_sound_notification">Switch on to enable Sound notification</string>
+
+    <string name="title_vibrate_notifiaction">Enable Vibrate notification</string>
+    <string name="attachment_summary_vibrate_notification">Switch on to enable Vibrate notification</string>
+
+    <string name="title_led_notifiaction">Enable Led notification</string>
+    <string name="attachment_summary_led_notification">Switch on to enable Led notification</string>
 </resources>

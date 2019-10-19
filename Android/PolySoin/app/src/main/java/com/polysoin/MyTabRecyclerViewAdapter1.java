@@ -22,13 +22,11 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
     private final List<DummyItem> mValues;
     private final List<DummyItem> mValuesHistory;
     private final OnListFragmentInteractionListener mListener;
-    private TabFragment1 tabFragment1;
 
-    public MyTabRecyclerViewAdapter1(List<DummyItem> items, List<DummyItem> itemsHistory, OnListFragmentInteractionListener listener, TabFragment1 tabFragment1) {
+    public MyTabRecyclerViewAdapter1(List<DummyItem> items, List<DummyItem> itemsHistory, OnListFragmentInteractionListener listener) {
         mValues = items;
         mValuesHistory = itemsHistory;
         mListener = listener;
-        this.tabFragment1 = tabFragment1;
     }
 
     @Override
@@ -43,17 +41,6 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
         holder.mItem = mValues.get(position);
         holder.mTitleView.setText(mValues.get(position).title);
         holder.mDetailView.setText(mValues.get(position).details);
-/*
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });*/
     }
 
     @Override
@@ -72,15 +59,18 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
             mView = view;
             mTitleView = view.findViewById(R.id.item_title);
             mDetailView = view.findViewById(R.id.detail);
-            Button button = view.findViewById(R.id.isTaken);
+            final Button button = view.findViewById(R.id.isTaken);
 
             //Button click event handling
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mValues.get(getPosition()).isTaken = true;
-                    mValuesHistory.add(mValues.get(getPosition()));
-                    removeAt(getPosition());
+                    if (!mItem.isTaken) {
+                        mItem.isTaken = true;
+                        mValuesHistory.add(mItem);
+                        removeAt(mValues.indexOf(mItem));
+                        mListener.onListFragmentInteraction(button, mItem.id);
+                    }
                 }
             });
         }

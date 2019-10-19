@@ -6,15 +6,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,14 +46,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (savedInstanceState != null) {
             darkMode = savedInstanceState.getBoolean("darkMode");
-        }/*
-        if (!loadPrefs("auto_night_mode") && (!(loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)) || !(!loadPrefs("enable_night_mode") && (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO)))) {
-            if (loadPrefs("enable_night_mode")) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        }*/
+        }
+
         if (loadPrefs("enable_night_mode")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -67,17 +63,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         myPagerAdapter.addUpdate();
-        //button add
-        /*
-        FloatingActionButton fab = findViewById(R.id.qr_code_btn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //DrugDummyContent.addItem(DrugDummyContent.createDummyItem(DrugDummyContent.ITEMS.size() + DrugHistoryDummyContent.ITEMSHISTORY.size(), "medoc", "un cachet", new Date()));
-               // myPagerAdapter.addUpdate();
-                scheduleNotification(getNotification("10 second delay"), 10000);
-            }
-        });*/
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         if (loadPrefs("auto_night_mode")) {
@@ -130,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         scheduleNotification(getNotification("PolySoin", "take ur drug " + id), 10000, id);
     }
 
+    public void onListFragmentInteraction(Button button, int id) {
+        NotificationPublisher.notificationManager.cancel(id);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -157,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-
         savedInstanceState.putBoolean("darkMode", darkMode);
     }
 
@@ -202,6 +191,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         builder.setContentTitle(title);
         builder.setContentText(content);
         builder.setAutoCancel(true);
+        if (loadPrefs("vibrate_notification")) {
+            builder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        }
+        if (loadPrefs("sound_notification")) {
+            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        }
+        if (loadPrefs("led_notification")) {
+            builder.setLights(Color.BLUE, 3000, 3000);
+        }
         builder.setSmallIcon(R.drawable.ic_launcher_background);
         return builder;
     }

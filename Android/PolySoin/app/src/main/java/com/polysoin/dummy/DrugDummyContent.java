@@ -20,10 +20,10 @@ public class DrugDummyContent {
 
     public static void addItem(DummyItem item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+        ITEM_MAP.put(String.valueOf(item.id), item);
     }
 
     public static DummyItem createDummyItem(int position, String title, String details, Date date) {
-        return new DummyItem(String.valueOf(position), title, details, false, date);
+        return new DummyItem(position, title, details, false, date);
     }
 }
