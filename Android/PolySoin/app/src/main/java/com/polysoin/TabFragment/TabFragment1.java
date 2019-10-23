@@ -1,34 +1,37 @@
-package com.polysoin;
+package com.polysoin.TabFragment;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.polysoin.dummy.DrugHistoryDummyContent;
-import com.polysoin.dummy.DummyItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.polysoin.R;
+import com.polysoin.dummy.MedicineDummyContent;
+import com.polysoin.dummy.MedicineHistoryDummyContent;
 
 /**
  * A fragment representing a list of Items.
  */
-public class TabHistoryFragment extends Fragment {
+public class TabFragment1 extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private MyTabHistoryRecyclerViewAdapter myTabRecyclerViewAdapter1;
     private OnListFragmentInteractionListener mListener;
+    private MyTabRecyclerViewAdapter1 myTabRecyclerViewAdapter1;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public TabHistoryFragment() {
+    public TabFragment1() {
     }
 
     @Override
@@ -43,25 +46,29 @@ public class TabHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tabhistory_list, container, false);
-        myTabRecyclerViewAdapter1 = new MyTabHistoryRecyclerViewAdapter(DrugHistoryDummyContent.ITEMSHISTORY, mListener);
+        View view = inflater.inflate(R.layout.fragment_tab_list1, container, false);
+        myTabRecyclerViewAdapter1 = new MyTabRecyclerViewAdapter1(MedicineDummyContent.ITEMS, MedicineHistoryDummyContent.ITEMSHISTORY, mListener);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(myTabRecyclerViewAdapter1);
+        Context context = view.getContext();
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        return view;
-    }
+        recyclerView.setAdapter(myTabRecyclerViewAdapter1);
 
-    public void update() {
-        myTabRecyclerViewAdapter1.notifyDataSetChanged();
+        //button add
+        final FloatingActionButton fab = view.findViewById(R.id.qr_code_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onListFragmentInteraction(fab);
+                myTabRecyclerViewAdapter1.notifyDataSetChanged();
+            }
+        });
+        return view;
     }
 
     @Override
@@ -82,6 +89,9 @@ public class TabHistoryFragment extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(FloatingActionButton floatingActionButton);
+
+        void onListFragmentInteraction(Button button, int id);
     }
 }
+

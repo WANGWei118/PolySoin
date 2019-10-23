@@ -9,14 +9,14 @@
 
     <!-- Settings Preference  -->
 
-    <!-- night theme preference -->
-    <string name="messages_header">Night Theme</string>
+    <!-- Dark theme preference -->
+    <string name="messages_header">Dark Theme</string>
 
-    <string name="enable_night_mode">Enable Night Mode</string>
-    <string name="attachment_summary_enable_night_mode">Switch on to enable Night Mode</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="attachment_summary_enable_dark_mode">Switch on to enable Dark Mode</string>
 
-    <string name="enable_auto_night_mode">Enable auto Night Mode</string>
-    <string name="attachment_summary__auto_enable_night_mode">Switch on to enable auto Night Mode</string>
+    <string name="enable_auto_dark_mode">Enable auto Dark Mode</string>
+    <string name="attachment_summary__auto_enable_dark_mode">Switch on to enable auto Dark Mode</string>
 
     <!-- notification preference -->
     <string name="messages_header_notification">Notification</string>
@@ -24,9 +24,16 @@
     <string name="title_sound_notifiaction">Enable Sound notification</string>
     <string name="attachment_summary_sound_notification">Switch on to enable Sound notification</string>
 
-    <string name="title_vibrate_notifiaction">Enable Vibrate notification</string>
-    <string name="attachment_summary_vibrate_notification">Switch on to enable Vibrate notification</string>
+    <string name="title_vibrate_notifiaction">Enable Vibrating notification</string>
+    <string name="attachment_summary_vibrat_notification">Switch on to enable Vibrating notification</string>
 
     <string name="title_led_notifiaction">Enable Led notification</string>
     <string name="attachment_summary_led_notification">Switch on to enable Led notification</string>
+
+    <!-- medicine validation preference -->
+    <string name="messages_header_medicine_validation">Medicine Validation</string>
+
+    <string name="title_accelerometer_validation">Enable Validation by Shaking</string>
+    <string name="attachment_summary_accelerometer_validation">Switch on to enable Validation by Shaking</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.polysoin;
+package com.polysoin.TabFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +8,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.polysoin.TabFragment1.OnListFragmentInteractionListener;
+import com.polysoin.NotificationPublisher;
+import com.polysoin.R;
+import com.polysoin.TabFragment.TabFragment1.OnListFragmentInteractionListener;
 import com.polysoin.dummy.DummyItem;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -65,12 +68,13 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!mItem.isTaken) {
+                    //if (!mItem.isTaken && Calendar.getInstance().after(mItem.date)) {
                         mItem.isTaken = true;
-                        mValuesHistory.add(mItem);
-                        removeAt(mValues.indexOf(mItem));
+                        removeAt(mItem, mItem.id, mValues.indexOf(mItem));
                         mListener.onListFragmentInteraction(button, mItem.id);
-                    }
+                    /*}else{
+                        //afficher un message
+                    }*/
                 }
             });
         }
@@ -79,11 +83,14 @@ public class MyTabRecyclerViewAdapter1 extends RecyclerView.Adapter<MyTabRecycle
         public String toString() {
             return super.toString() + " '" + mDetailView.getText() + "'";
         }
+    }
 
-        public void removeAt(int position) {
-            mValues.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, mValues.size());
+    public void removeAt(DummyItem item, int id, int position) {
+        mValuesHistory.add(item);
+        mValues.remove(position);
+        notifyItemRemoved(position);
+        if (NotificationPublisher.notificationManager != null) {
+            NotificationPublisher.notificationManager.cancel(id);
         }
     }
 }

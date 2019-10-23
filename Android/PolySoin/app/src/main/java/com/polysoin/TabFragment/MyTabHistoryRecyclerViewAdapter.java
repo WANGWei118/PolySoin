@@ -1,4 +1,4 @@
-package com.polysoin;
+package com.polysoin.TabFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.polysoin.TabHistoryFragment.OnListFragmentInteractionListener;
+import com.polysoin.R;
+import com.polysoin.TabFragment.TabHistoryFragment.OnListFragmentInteractionListener;
 import com.polysoin.dummy.DummyItem;
 
 import java.util.List;
@@ -39,17 +40,6 @@ public class MyTabHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyTabH
         if (holder.mItem.isTaken) {
             holder.mTitleView.setText(mValues.get(position).title);
             holder.mDetailView.setText(mValues.get(position).details);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mListener) {
-                        // Notify the active callbacks interface (the activity, if the
-                        // fragment is attached to one) that an item has been selected.
-                        mListener.onListFragmentInteraction(holder.mItem);
-                    }
-                }
-            });
         }
     }
 

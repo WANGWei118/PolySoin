@@ -28,7 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat /*implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener*/ {
+    public static class SettingsFragment extends PreferenceFragmentCompat {
         SettingsActivity settingsActivity;
 
         @Override
@@ -36,12 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
             //refresh the activity after change dark mode
-            final SwitchPreferenceCompat switchPreferenceCompat = findPreference("enable_night_mode");
+            final SwitchPreferenceCompat switchPreferenceCompat = findPreference("enable_dark_mode");
             switchPreferenceCompat.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //set dark mode or no
-                    if (!PreferenceManager.getDefaultSharedPreferences(settingsActivity).getBoolean("enable_night_mode", false)) {
+                    if (!PreferenceManager.getDefaultSharedPreferences(settingsActivity).getBoolean("enable_dark_mode", false)) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

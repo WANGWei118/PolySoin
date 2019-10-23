@@ -3,15 +3,15 @@
     <PreferenceCategory app:title="@string/messages_header">
         <SwitchPreferenceCompat
             app:defaultValue="false"
-            app:key="auto_night_mode"
-            app:summary="@string/attachment_summary__auto_enable_night_mode"
-            app:title="@string/enable_auto_night_mode"
+            app:key="auto_dark_mode"
+            app:summary="@string/attachment_summary__auto_enable_dark_mode"
+            app:title="@string/enable_auto_dark_mode"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             app:defaultValue="false"
-            app:key="enable_night_mode"
-            app:summary="@string/attachment_summary_enable_night_mode"
-            app:title="@string/enable_night_mode"
+            app:key="enable_dark_mode"
+            app:summary="@string/attachment_summary_enable_dark_mode"
+            app:title="@string/enable_dark_mode"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/messages_header_notification">
@@ -19,16 +19,23 @@
             app:defaultValue="false"
             app:key="sound_notification"
             app:summary="@string/attachment_summary_sound_notification"
-            app:title="@string/title_sound_notifiaction"/>
+            app:title="@string/title_sound_notifiaction" />
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="vibrate_notification"
-            app:summary="@string/attachment_summary_vibrate_notification"
-            app:title="@string/title_vibrate_notifiaction"/>
+            app:summary="@string/attachment_summary_vibrat_notification"
+            app:title="@string/title_vibrate_notifiaction" />
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="led_notification"
             app:summary="@string/attachment_summary_led_notification"
-            app:title="@string/title_led_notifiaction"/>
+            app:title="@string/title_led_notifiaction" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/messages_header_medicine_validation">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="accelerometer_validation"
+            app:summary="@string/attachment_summary_accelerometer_validation"
+            app:title="@string/title_accelerometer_validation" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

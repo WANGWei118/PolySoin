@@ -13,7 +13,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".TabFragment1" />
+        tools:context=".TabFragment.TabFragment1" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/qr_code_btn"

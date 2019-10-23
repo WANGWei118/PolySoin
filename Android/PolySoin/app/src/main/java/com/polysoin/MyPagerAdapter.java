@@ -4,6 +4,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.polysoin.TabFragment.TabFragment1;
+import com.polysoin.TabFragment.TabHistoryFragment;
+import com.polysoin.dummy.DummyItem;
+import com.polysoin.dummy.MedicineDummyContent;
+import com.polysoin.dummy.MedicineHistoryDummyContent;
 import com.polysoin.enums.TabEnum;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
@@ -11,24 +16,21 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
-    private TabFragment1 tabFragment1;
-    private TabFragment1 tabFragment2;
-    private TabHistoryFragment tabFragment3;
-
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                tabFragment1 = new TabFragment1();
-                return tabFragment1;
+                return new TabFragment1();
             case 1:
-                tabFragment2 = new TabFragment1();
-                return tabFragment2;
+                return new TabFragment1();
             case 2:
-                tabFragment3 = new TabHistoryFragment();
-                return tabFragment3;
+                return new TabHistoryFragment();
         }
         return null;
+    }
+
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override
@@ -50,24 +52,13 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    public void addUpdate() {
-        if (tabFragment1 != null) {
-            tabFragment1.update();
-        }
-        if (tabFragment2 != null) {
-            tabFragment2.update();
-        }
+    public void removeAt(DummyItem item) {
+        MedicineHistoryDummyContent.addItem(item);
+        MedicineDummyContent.ITEMS.remove(item);
     }
 
-    public void removeUpdate() {
-        if (tabFragment1 != null) {
-            tabFragment1.update();
-        }
-        if (tabFragment2 != null) {
-            tabFragment2.update();
-        }
-        if (tabFragment3 != null) {
-            tabFragment3.update();
-        }
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 }

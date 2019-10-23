@@ -1,12 +1,12 @@
 package com.polysoin.dummy;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DrugDummyContent {
+public class MedicineDummyContent {
 
     /**
      * An array of sample (dummy) items.
@@ -23,7 +23,7 @@ public class DrugDummyContent {
         ITEM_MAP.put(String.valueOf(item.id), item);
     }
 
-    public static DummyItem createDummyItem(int position, String title, String details, Date date) {
+    public static DummyItem createDummyItem(int position, String title, String details, Calendar date) {
         return new DummyItem(position, title, details, false, date);
     }
 }

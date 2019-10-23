@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,17 +28,22 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.polysoin.dummy.DrugDummyContent;
-import com.polysoin.dummy.DrugHistoryDummyContent;
+import com.polysoin.TabFragment.TabFragment1;
+import com.polysoin.TabFragment.TabHistoryFragment;
 import com.polysoin.dummy.DummyItem;
+import com.polysoin.dummy.MedicineDummyContent;
+import com.polysoin.dummy.MedicineHistoryDummyContent;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.ConcurrentModificationException;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, TabFragment1.OnListFragmentInteractionListener, TabHistoryFragment.OnListFragmentInteractionListener {
 
     private boolean darkMode;
-    private SensorManager sensorManager;
+    private static SensorManager sensorManager;
     private Sensor lightSensor;
+    private static Sensor accelerometerSensor;
+    private MyPagerAdapter myPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,28 +54,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             darkMode = savedInstanceState.getBoolean("darkMode");
         }
 
-        if (loadPrefs("enable_night_mode")) {
+        if (loadPrefs("enable_dark_mode")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(myPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        myPagerAdapter.addUpdate();
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if (loadPrefs("auto_night_mode")) {
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (loadPrefs("auto_dark_mode")) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
-            sensorManager.unregisterListener(this);
+            sensorManager.unregisterListener(this, lightSensor);
+        }
+        if (loadPrefs("accelerometer_validation")) {
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            sensorManager.unregisterListener(this, accelerometerSensor);
         }
     }
 
@@ -81,9 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private Boolean loadPrefs(String key) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean data = sharedPreferences.getBoolean(key, false);
-        return data;
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(key, false);
     }
 
     @Override
@@ -98,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-
         if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
@@ -106,33 +115,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
-    public void onListFragmentInteraction(DummyItem item) {
-
-    }
-
     public void onListFragmentInteraction(FloatingActionButton floatingActionButton) {
-        int id = DrugDummyContent.ITEMS.size() + DrugHistoryDummyContent.ITEMSHISTORY.size();
-        DrugDummyContent.addItem(DrugDummyContent.createDummyItem(id, "Drug " + id, "take ur drug " + id, new Date()));
-        scheduleNotification(getNotification("PolySoin", "take ur drug " + id), 10000, id);
+        int id = MedicineDummyContent.ITEMS.size() + MedicineHistoryDummyContent.ITEMSHISTORY.size();
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.SECOND, 10);
+        MedicineDummyContent.addItem(MedicineDummyContent.createDummyItem(id, "Medicine " + id, "Take your medicine " + id, c));
+        scheduleNotification(getNotification("PolySoin", "Take your medicine " + id), 10000, id);
+        myPagerAdapter.notifyDataSetChanged();
     }
 
     public void onListFragmentInteraction(Button button, int id) {
-        NotificationPublisher.notificationManager.cancel(id);
+        myPagerAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (loadPrefs("auto_night_mode")) {
+        if (loadPrefs("auto_dark_mode")) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
-            sensorManager.unregisterListener(this);
+            sensorManager.unregisterListener(this, lightSensor);
+        }
+        if (loadPrefs("accelerometer_validation")) {
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            sensorManager.unregisterListener(this, accelerometerSensor);
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //remove sensor
         sensorManager.unregisterListener(this);
     }
 
@@ -152,15 +167,45 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        float lux = event.values[0];
-        if (lux < 50 && !darkMode) {
-            savePrefs("enable_night_mode", true);
-            darkMode = true;
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (lux >= 50 && darkMode) {
-            savePrefs("enable_night_mode", false);
-            darkMode = false;
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float[] values = event.values;
+            float x = values[0];
+            float y = values[1];
+            float z = values[2];
+
+            float acceleration = (x * x + y * y + z * z) / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+            if (acceleration >= 2.5) {
+                boolean isFinish = false;
+                while (!isFinish) {
+                    try {
+                        for (DummyItem d : MedicineDummyContent.ITEMS) {
+                            if (Calendar.getInstance().after(d.date)) {
+                                d.isTaken = true;
+                                myPagerAdapter.removeAt(d);
+                                if (NotificationPublisher.notificationManager != null) {
+                                    NotificationPublisher.notificationManager.cancel(d.id);
+                                }
+                            }
+                        }
+                        isFinish = true;
+                    } catch (ConcurrentModificationException e) {
+                    }
+                    myPagerAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+            float lux = event.values[0];
+            if (lux < 20 && !darkMode) {
+                savePrefs("enable_dark_mode", true);
+                darkMode = true;
+                recreate();
+            } else if (lux >= 20 && darkMode) {
+                savePrefs("enable_dark_mode", false);
+                darkMode = false;
+                recreate();
+            }
         }
     }
 
@@ -200,7 +245,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (loadPrefs("led_notification")) {
             builder.setLights(Color.BLUE, 3000, 3000);
         }
-        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getApplication().getResources(),
+                R.mipmap.ic_launcher));
         return builder;
     }
 }
